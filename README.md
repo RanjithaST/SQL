@@ -19,10 +19,10 @@ INSERT – Add new records
 UPDATE – Modify existing records  
 DELETE – Remove records  
 
-TCL – Transaction Control Language
-Used to manage transactions.
-COMMIT – Save changes permanently  
-ROLLBACK – Undo changes  
+TCL – Transaction Control Language  
+Used to manage transactions.  
+COMMIT – Save changes permanently    
+ROLLBACK – Undo changes   
 
 DCL – Data Control Language  
 Used to control access to the database.  
