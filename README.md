@@ -15,9 +15,9 @@ DROP – Delete tables or databases
 DML – Data Manipulation Language  
 Used to work with data inside tables.  
 
-INSERT – Add new records
-UPDATE – Modify existing records
-DELETE – Remove records
+INSERT – Add new records  
+UPDATE – Modify existing records  
+DELETE – Remove records  
 
 TCL – Transaction Control Language
 Used to manage transactions.
@@ -43,12 +43,12 @@ NOT NULL - Cannot contain NULL values
 DEFAULT  
 CHECK  
 
-Example
+Example  
 CREATE TABLE Department (
     dept_id INT PRIMARY KEY,
     dept_name VARCHAR(50)
 );
-
+  
 CREATE TABLE Employee (
     emp_id INT PRIMARY KEY,
     emp_name VARCHAR(50),
