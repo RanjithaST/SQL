@@ -1,0 +1,757 @@
+-- This is a single-line comment
+/* This is a multiline comment */
+
+-- SQL IS NOT CASE SENSITIVE
+
+-- Creating First Database(Not case sensitive but we prefer uppercase because it highlights the commands
+-- Syntax: CREATE DATABASE DATABASE_NAME
+CREATE DATABASE temp1;
+create database temp2;-- Highlight only this line and run because of 2 table creation we will get error
+
+-- Delete the database
+-- Syntax: DROP DATABASE DATABASE_NAME
+DROP DATABASE temp2;
+drop database temp1;
+
+CREATE DATABASE college;
+-- USE statement is a simple command to select a specific database as the default for all subsequent statements within the current session. 
+-- Syntax: USE DATABASE_NAME
+USE college;
+
+-- Creating First Table
+/* Syntax: CREATE TABLE table_name(
+column_name1 datatype constraint,
+column_name2 datatype constraint,
+column_name(n) datatype constraint
+); */
+Create table student(
+id INT PRIMARY KEY,
+name VARCHAR(20),
+age INT NOT NULL
+);
+
+-- Inserting data to the table
+-- Syntax: INSERT INTO table_name VALUES();
+INSERT INTO student VALUES(1,'AMAN',26);
+INSERT INTO student VALUES(2,'JAYA',24);
+
+-- Retrieving all the data from the table
+-- SELECT * FROM table_name;
+SELECT * FROM student;
+
+/*
+CHAR – Fixed-length string (0–255 characters->size=256) → CHAR(50) [name,adress etc] -> CHAR(50)- computer memory of 50 bytes wil be reserved so it is not efficient.
+VARCHAR – Variable-length string (0–255 characters->size=256) → VARCHAR(50)
+BLOB – Binary Large Object (0–65,535 bytes) → BLOB(1000)
+INT – Integer value (−2,147,483,648 to 2,147,483,647) → INT
+TINYINT – Very small integer (−128 to 127) → TINYINT
+BIGINT – Large integer (−9,223,372,036,854,775,808 to 9,223,372,036,854,775,807) → BIGINT
+BIT – Stores x-bit values (x ranges from 1 to 64 bits) → BIT(2)-> {00, 01, 10, 11}
+FLOAT – Decimal number with precision up to 23 digits → FLOAT -> [12.5]
+DOUBLE – Decimal number with precision from 24 to 53 digits → DOUBLE [Large decimal values]
+BOOLEAN – Boolean value (0 = FALSE, 1 = TRUE) → BOOLEAN
+DATE – Date in YYYY-MM-DD format (1000-01-01 to 9999-12-31) → DATE
+YEAR- year in 4 digits format from 1901 to 2155 -> YEAR
+*/
+
+/*
+Signed and Unsigned datatype
+1.Numeric - INT,FLOAT,DOUBLE (BOTH - AND + ARE ALLOWED) - SO THEY ARE SIGNED.
+BUT when we already know that in one particular column if positive values are only stored the we can make them as UNSIGNED
+EG:AGE AND SALARY CANNOT BE NEGATIVE SO MAKE THOSE COLUMN UNSIGNED AND INCREASE THE RANGE.
+EG: TINYINT(-128 TO 127) ==> TINYINT UNSIGNED(0 TO 255) ==>SPACE OCCUPIED BY NEGATIVE VALUES ARE SHIFTED TO POSITIVE VALUES
+*/
+/*
+TYPES OF SQL COMMMANDS
+1.DDL - DATA DEFINITION LANGUAGE-DATABASE create,alter,rename,truncate and drop - schema related
+2.DQL- DATA QUERY LANGUAGE - select
+2.DML- DATA MANUPULATION LANGUAGE - Manipulation of rows - insert,update, delete
+4.DCL - DATA CONTROL LANGUAGE - grant and revoke permission to users (restrict table access like fees for accounts tean and marks for teachers)
+5.TCL-TRANSACTION CONTROL LANGUAGE- start transaction ,commit,rollback
+*/
+-- ****************************************************************************************************************************
+-- Database related queries
+/*
+CREATE DATABASE db_name;
+CREATE DATABASE IF NOT EXISTS db_name;
+*** IF NOT EXISTS- Create DB only if its not existing prior
+
+DROP DATABASE db_name;
+DROP DATABASE IF EXISTS db_name;
+
+SHOW DATABASES;
+SHOW TABLES;
+
+*/
+-- Gives warning, but it not give error
+CREATE DATABASE IF NOT EXISTS college;
+-- Gives warning, but it not give error
+DROP DATABASE IF EXISTS teacher;
+SHOW DATABASES;
+-- RUN USE DB_NAME THEN ONLY RUN SHOW TABLES
+SHOW TABLES;
+-- ****************************************************************************************************************************
+ -- TABLE RELATED QUERIES
+ /*
+ 
+1. CREATE -> DEFINE TABLE SCHEMA/DESIGN/COLUMNS
+CREATE TABLE table_name(
+column_name1 datatype constraint,
+column_name2 datatype constraint,
+column_name(n) datatype constraint
+);
+
+2.SELECT AND VIEW ALL COLUMNS
+SELECT * DROM table_name;
+* means All
+
+3. INSERT ROWS TO TABLE - COLUMN NAME AND VALUES SHOULD BE IN SAME OREDR
+INSERT INTO table_name VALUES()
+INSERT INTO table_name(colname1,colname2) VALUES (col1_v1,col2_v1),(col1_v2,col2_v2);
+*/
+DROP TABLE student;
+
+CREATE TABLE student(
+rollno INT PRIMARY KEY,
+name VARCHAR(20)
+);
+SELECT * FROM STUDENT;
+INSERT INTO student(rollno,name) VALUES (100,'KARAN'),(102,'ARJUN');
+INSERT INTO student(rollno,name) VALUES (103,'SHAYAM');
+
+-- IF WE ALREADY KNOW THE ORDER,DATATYPE AND TABLE IS SIMPLE THEN WE CAN INSERT AS BELOW:
+INSERT INTO student VALUES (104,'RAJ');
+INSERT INTO student VALUES (105,'JAY'),(106,'HARI');
+INSERT INTO STUDENT VALUES (107,'JAYA');
+
+-- **************************************************************************************************************************
+/*
+KEYS: 
+1. PRIMARY KEY
+It is a column or set of columns in table that uniquely identifies each row.
+Table should have 1 PK and it should be unique and not null
+
+2. FOREIGN KEY
+It is a column or set of columns in table that refers the PK of another table
+There can be multiple FK in a single table
+FK can be duplicate and null values.
+*/
+-- **************************************************************************************************************************
+/*
+CONSTRAINTS: are used to specify the rules for data in a table
+1.NOT NUll-col cannot have null value
+2.UNIQUE- col cannot have duplicates
+3. PRIMARY KEY - unique + not null
+
+2 ways to define primary key
+1.CREATE TABLE table_name(
+column_name1 datatype PRIMARY KEY,
+column_name2 datatype constraint,
+column_name(n) datatype constraint
+); 
+OR 
+CREATE TABLE table_name(
+column_name1 datatype,
+column_name2 datatype constraint,
+column_name(n) datatype constraint,
+PRIMARY KEY (column_name1)
+);
+
+IF COMBINATON IS NEEDED TO BE A PRIMARY KEY THEN col1 and col2 can have duplicate values but col1+col2 should not be dupicate values
+CREATE TABLE table_name(
+column_name1 datatype,
+column_name2 datatype constraint,
+column_name(n) datatype constraint,
+PRIMARY KEY (column_name1,column_name2)
+);
+
+4.Foreign key - prevent actions that would destroy links between tables
+HERE,customer is a table having id as a PK and it acts a a FK for temp table's cus_id
+CREATE TABLE temp(
+cus_id datatype,
+FOREIGN KEY(cus_id) references customer(id) 
+);
+
+5.DEFAULT-set the default value of a column if field is left null/empty
+salary INT DEFAULT 25000;
+CREATE TABLE temp(
+salary datatype DEFAULT values
+);
+
+6.CHECK - LIMIT THE VALUES ALLOWED IN A COLUMN
+CREATE TABLE temp(
+id INT primary key,
+city VARCHAR(50),
+age INT,
+CONSTRAINT age_check(constraint name can be written or skipped) CHECK (age>=18 and city="Delhi")
+);
+
+OR
+
+CREATE TABLE temp(
+age INT CHECK (age>=18)
+);
+*/
+-- **********************************************************************************************************************************
+
+drop DATABASE college;
+create DATABASE college;
+use college;
+CREATE TABLE student(
+rollno INT PRIMARY KEY,
+name VARCHAR(50),
+marks INT NOT NULL,
+grade VARCHAR(1),
+city VARCHAR(20)
+);
+insert into student values(101,"anil",78,"C","Pune"),(102,"bhumika",93,"A","Mumbai"),(103,"chetan",85,"B","Mumbai"),
+(104,"dhruv",96,"A","Delhi"),(105,"emanuel",12,"F","Delhi"),(106,"farah",82,"B","Delhi");
+
+/*
+SELECT - RETRIEVING ANY DATA FROM THE DB
+SYNTAX:
+SELECT COL1,COL2 FROM TABLE_NAME;
+
+DISTINCT is used to retrieve unique values from the columns
+SELECT DISTINCT COL1,COL2 FROM TABLE_NAME
+
+CLAUSES: TO DEFINE SOME CONDITIONS/EXTRA RULE
+1. WHERE - TO DEFINE SOME CONDITIONS.
+SELECT COL1,COL2 FROM TABLE_NAME WHERE CONDITIONS;
+We can use may operators with WHERE CLAUSE:
+1.ARITHMETIC OPERATORS: + - * / %(%->REMAINDER - 4%2=0 AND  /->QUOTIENT- 4/2=2) 
+2.COMPARISION OPERATORS: = != > >= < <=
+3.LOGICAL OPERATORS:AND OR NOT IN BETWEEN ALL LIKE ANY
+4.BITWISE OPERATORS:&(BITWISE AND) |(BITWISE OR)
+
+LOGICAL OPERATORS:
+1.AND - To check for both conditios to be true
+2.OR -  To check any one conditions is true
+3.BETWEEN - selects for a given range
+4.IN - matches any value in the list
+5.NOT - to negate the given condition - reverse the condition
+
+2. LIMIT Clause - Sets the upper limit on the rows to be returned.
+SYNTAX: select COL_1,COL_2 from TABLE_NAME LIMIT NUMBER;
+        select COL_1,COL_2 from TABLE_NAME WHERE CONDITION LIMIT NUMBER;
+        select COL_1,COL_2 from TABLE_NAME order by col_1 desc/asc LIMIT NUMBER;
+        
+3.ORDER BY Clause- To sort in ascending(ASC) - 1,2,3 OR A,B,C,D or descending order(DESC)- 3,2,1 OR D,C,B,A
+By default order by is ascending in nature if nothing specified means.
+SYNTAX: select COL_1,COL_2 from TABLE_NAME ORDER BY COL_NAME(S) ASC;
+
+4. GROUP BY Clause- Groups the rows that have the same values into summary rows
+It collects data from multiple records and groups the result by one or more column
+Generally we use group by with some aggregation function
+
+5. Having clause - similar to where(which applies conditions on rows), having clause(applies condition on groups)
+used when we want to apply any condition after grouping
+
+      
+*/
+select name,marks from student; -- specific columns
+select * from student; -- retreive all columns
+select city from student;
+select DISTINCT city from student; -- DISTINCT is used to retrieve unique values from the columns
+SELECT NAME FROM STUDENT WHERE MARKS>80 AND CITY = "MUMBAI"; -- WHERE CLAUSE
+select * from student where marks>60;
+
+-- ADDITION OP
+select * from student where marks+10>90;
+
+-- COMPARISION OP
+select * from student where marks=93;
+select * from student where marks!=93;
+
+-- LOGICAL OP for where clause
+SELECT * FROM STUDENT WHERE MARKS>80 AND CITY = "MUMBAI"; -- AND
+SELECT * FROM STUDENT WHERE MARKS>80 OR CITY = "MUMBAI"; -- OR
+SELECT * FROM STUDENT WHERE MARKS BETWEEN 80 AND 90; -- BETWEEN - INCLUSIVE(80 AND 90 IS ALSO CONSIDERED)
+select * from student where city in ("Delhi","Mumbai"); -- IN
+select * from student where city not in ("Delhi","Mumbai"); -- NOT IN -- gives Pune
+
+-- LIMIT
+select * from student LIMIT 3;
+select * 
+from student
+WHERE MARKS>90
+LIMIT 3; -- 2 ROWS ARE DISPLAYED AS WE DONT HAVE 3 ROWS TO DISPLAY
+
+-- ORDER BY
+select * from student order by city ASC; -- ALPHABETICAL ORDER
+select * from student order by city DESC; -- REVERSE ALPHABETICAL ORDER
+
+-- SELECT TOP 3 SCORERES OR THE CLASS
+select * from student order by MARKS DESC LIMIT 3; -- DECREASING ORDER
+
+-- GROUP BY
+select city,count(rollno) from student group by city;
+select city,avg(marks) from student group by city;
+select city,name,count(rollno) from student group by city; -- error bcz name is not present along with the city after group by.
+
+-- Having clause
+-- count no of students in each city where max marks crosses 90
+select city,count(rollno)
+from student
+group by city
+having max(marks)>90; -- this applies on each group
+
+/*
+select city,count(rollno)
+from student
+where max(marks)>90
+group by city; 
+ No sense
+*/
+-- *******************************************************************************************************************************
+/*
+AGGREGATE FUNCTIONS
+
+FUNCTIONS: performs a calculation on set of values(AGGREGATE) and return a single value.
+1. COUNT()
+2. MAX()
+3. MIN()
+4. SUM()
+5. AVG()
+
+ SYNATX:
+ 1. SELECT MAX(COL_NAME) FROM TABLE_NAME;
+*/
+
+select marks from student;
+select max(marks) from student;
+select min(marks) from student;
+select avg(marks) from student;
+select count(rollno) from student;
+
+-- ********************************************************************************************************************************
+-- Practice
+-- 1. select avg marks of each city arranged in ascending order
+select city,avg(marks) from student group by city order by avg(marks) asc;
+
+-- 2. select no of students got particular grade
+select grade,count(rollno) from student group by grade order by grade;
+
+# ********************************************************************************************************************************
+-- General order
+/*
+select column(s)
+from table_name
+where condition    -- applies on rows
+group by column(s)
+having condition   -- applies on groups/columns
+order by column(s) ASC
+*/
+
+select city
+from student
+where grade="A"
+Group by city
+having max(marks)>=93
+order by city desc;
+
+-- *********************************************************************************************************************************
+/*
+TABLE RELATED QUERIES
+1. Update - to update existing rows of a table
+update table_name set col1=val1,col2=val2 where condition;
+*/
+update student set grade="O" where grade="A"; -- error :safe.MySQL have safemode to prevent updates on table. So run below query to turn off
+set SQL_SAFE_UPDATES=0; -- 0 means off and 1 means on
+select * from student;
+update student set marks=82 where rollno=105;
+update student set grade="B" where marks between 80 and 90;
+update student set marks=marks+2;
+/*
+2. Delete- to delete existing rows
+*/
+delete from student where name="anil";
+delete from student; -- deletes entire data
+
+-- **********************************************************************************************************************************
+-- Foreign keys: Parent(PK) -> Child(FK)
+-- for visualizing the below connection go to database(in upper tab)->next next ...->select college db->gives er diagram.
+use college;
+create table department( -- parent table
+id int Primary key,
+name varchar(20)
+);
+create table teacher( -- child table
+id int Primary key,
+name varchar(20),
+dept_id INT,
+foreign key (dept_id) references department(id)
+ON UPDATE CASCADE -- UPDATES ARE REFLECTED IN THIS TABLE IF ANY UPDATES HAPPENS IN PARENT TABLE
+ON DELETE CASCADE
+);
+DROP TABLE TEACHER;
+-- ************************************************************************************************************************
+
+-- Cascading for Foreign Key
+-- parent table changes should also reflect in child table through FK we use cascade
+/*
+On delete cascade
+when we create a foreign key using this option,it deletes the referencing rows in the child table when the referenced row is deleted in the parent
+table which has a primary key
+
+On update cascade
+when we create a foreign key using this option, referencing rows in the child table  are updated when the referenced row are updated in the parent
+table which has a primary key
+
+create table teacher( -- child table
+id int Primary key,
+name varchar(20),
+dept_id INT,
+foreign key (dept_id) references department(id)
+ON DELETE CASCADE
+ON UPDATE CASCADE
+);
+*/
+INSERT INTO DEPARTMENT VALUES(101,"ENG"),(102,"IT");
+SELECT * FROM DEPARTMENT;
+INSERT INTO TEACHER VALUES(1,"ADAM",101),(2,"EVE",102);
+SELECT * FROM TEACHER;
+UPDATE DEPARTMENT SET ID=103 WHERE ID=102;
+-- ********************************************************************************************************************************
+/*
+TABLE RELATED QUERIES
+ 1.ALTER - TO CHANGE SCHEMA(COLUMNS) (COLUMNS,DATATYPES AND CONSTRAINTS)
+ SYNTAX:
+ 1.ADD COLUMN
+ ALTER TABLE table_name
+ ADD COLUMN column_name datatype constarint;
+ 
+ 2.DROP COLUMN
+ ALTER TABLE table_name
+ DROP COLUMN column_name;
+ 
+ 3.RENAME TABLE
+ ALTER TABLE table_name
+ RENAME TO new_table_name;
+ 
+ 4.CHANGE COLUMN (NAME)
+ ALTER TABLE table_name
+ CHANGE COLUMN old_name new_name new_datatype new_constraint;
+				 id       std_id     INT
+
+5.MODIFY Column(modify datatype/constraint)
+ALTER TABLE table_name
+MODIFY col_name new_datatype new constraint;
+*/
+
+-- Add column to table
+Alter table student add column age INT NOT NULL DEFAULT 19;
+select * from student;
+
+-- Delete column from existing table
+Alter table student drop column age;
+
+-- Modify datatype and constraint of column
+ALTER table student modify age varchar(2);
+
+-- Rename table
+ALTER table student 
+rename to stu;
+
+ALTER table stu 
+rename to student;
+
+-- Change column name
+ALTER table student
+change age stu_age INT;
+
+select * from student;
+-- ****************************************************************************************************************************
+/*
+TRUNCATE
+TRUNCATE - TO DELETE TABLE'S DATA WITHOUT DELETING TABLE.
+DROP - TO DELETE TABLE
+TRUNCATE TABLE table_name
+*/
+-- ******************************************************************************************************************************
+/*Practice question*/
+alter table student
+change name full_name Varchar(20);
+
+delete from student where marks<80;
+set sql_safe_updates=0;
+select * from student;
+
+alter table student
+drop column grade;
+-- **********************************************************************************************************************************
+/*JOINS IN SQL
+JOINS ARE USED TO COMBINE ROWS FROM TWO OR MORE TABLES,BASED ON THE RELATED COLUMN BETWEEN THEM
+EG:
+ID NAME 			ID SALARY
+1					 2
+2					 3
+ID IS COMMON COLUMN SO ID=2 NAME AND SALARY CAN BE RETRIEVED
+ID NAME SALARY
+2
+JOINS CAN BE USED ON THE TABLE HAVING FK BUT NOT COMPULSORY
+ -- ----------------------------------------------------------------------------
+TYPES OF JOINS:
+1.INNER JOIN - common data from both the tables we use inner join.
+2.OUTER JOIN 
+	a.Left join - data which is present in left table(complete) and present in overlapping area.
+	b.Right join - data which is present in right table(complete) and present in overlapping area.
+	c.Full join - complete data of both the tables
+    
+1.Inner join
+returns records that having values in both tables
+Syntax:
+select column(s)
+from tableA					-- from tableA
+inner join tableB			-- inner join tableB
+on tableA.col_name=tableB.col_name;
+*/
+create table student1(
+student_id INT primary key,
+name Varchar(20)
+);
+create table course1(
+student_id INT primary key,
+course Varchar(20)
+);
+insert into student1 values(101,'adam'),(102,'bob'),(103,'casey');
+insert into course1 values(102,'english'),(105,'math'),(103,'science'),(107,'computer science');
+Alter table course1
+modify student_id INT;
+
+select * from student1;
+/*
+101	adam
+102	bob
+103	casey
+*/
+
+select * from course1;
+/*
+102	english
+103	science
+105	math
+107	computer science
+*/
+-- inner join: same column same rows of both tables will come together(common data)
+select * 
+from student1
+inner join course1
+on student1.student_id=course1.student_id;
+
+-- below also give same output
+select * 
+from course1
+inner join student1
+on student1.student_id=course1.student_id;
+/*
+102	english	102	bob
+103	science	103	casey
+*/
+ /*alias = alternate name - as*/ 
+ select * 
+from course1 as c
+inner join student1 as s
+on s.student_id=c.student_id;
+
+-- Outer join
+/* 
+left join - returns all records from the left table and matched records from the right table.left and right table name cant be altered
+*/
+select * 
+from student1 as s
+left join course1 as c
+on s.student_id=c.student_id;
+/*
+NULl if no overlapp
+101	adam null  null	
+102	bob	102	english
+103	casey	103	science
+*/
+
+/* 
+right join - returns all records from the right table and matched records from the left table.left and right table name cant be altered
+*/
+select * 
+from student1 as s       -- 1st left table
+right join course1 as c  -- 2nd right table
+on s.student_id=c.student_id;
+/*
+102 	bob	    102   english
+103	casey	103	   science
+null  null  105 	math
+null  null	107	computer science
+*/
+
+
+/* 
+full join/full outer join - returns all records from  when there is a match in either left or right table. - UNION(as there is no full join in mysql)
+UBION - left+overlap + right + overlap = full table - union gives unique values(overlap will be given nly once)
+*/
+select * 
+from student1 as s       -- 1st left table
+left join course1 as c  -- 2nd right table
+on s.student_id=c.student_id
+UNION
+select * 
+from student1 as s       -- 1st left table
+right join course1 as c  -- 2nd right table
+on s.student_id=c.student_id;
+/*
+101	adam  null 	null
+102	bob	   102	english
+103	casey	103	science
+null  null	105	math
+null  null	107	computer science
+*/
+
+-- left exclusive join(only left table data means in left join which have null) and right exclusive join(only right table data)
+select * 
+from student1 as s       -- 1st left table
+left join course1 as c  -- 2nd right table
+on s.student_id=c.student_id
+where c.student_id is NULL;
+-- 101	adam null null
+
+-- overlapping - not null
+-- non overlapping - have null
+/*
+left-101
+overlap-102 103
+right=105 107
+*/
+
+-- right exclusive join
+select * 
+from student1 as s       -- 1st left table
+right join course1 as c  -- 2nd right table
+on s.student_id=c.student_id
+where s.student_id is NULL;
+/*
+null  null 105	math
+null  null 107	computer science
+*/
+
+-- full exclusive join
+select * 
+from student1 as s       -- 1st left table
+left join course1 as c  -- 2nd right table
+on s.student_id=c.student_id
+where c.student_id is NULL
+UNION
+select * 
+from student1 as s       -- 1st left table
+right join course1 as c  -- 2nd right table
+on s.student_id=c.student_id
+where s.student_id is NULL;
+
+/*
+101	adam null null	
+null null 105	math
+null null  107	computer science
+*/
+-- ---------------------------------------------------------------------------------------------------------------------------
+-- self join - it is a regular join but the table is joined within itself - 
+-- data in the same table is related to other data in the same table
+/*
+select column(s)
+from table as a
+join table as b
+on a.column_name=b.column_name
+*/
+create table emp(
+id int primary key,
+name varchar(20),
+manager_id int
+);
+insert into emp values(101,'adam',103),(102,'bob',104),(103,'cassey',0),(104,'donald',103);
+rollback;
+select a.name as manager_name,b.name
+from emp as a 
+join emp as b 
+on a.id=b.manager_id;
+
+/*
+manager  employee
+cassey	adam
+donald	bob
+cassey	donald*/
+
+-- -----------------------------------------------------------------------------------------------------------------------------
+/*
+UNION - used to combines the result set of 2 or more select statments. Gives unique records.Combine many tables results unique records.
+
+To us it:
+every select should have same no of columns
+columns must have similar data types
+columns in every select should be in the same order
+
+SYNTAX:
+select col(s) from tableA
+UNION
+select col(s) from tableB;
+*/
+use college;
+select full_name from student 
+UNION 
+select full_name from student;
+select * from student;
+insert into student values(109,'farah',90,'Delhi',19);
+
+/*
+UNION ALL - gives duplicates as well - PERFORMS FULL JOIN ON DIFFERENT TABLES*/
+select full_name from student 
+UNION ALL
+select full_name from student;
+-- ------------------------------------------------------------------------------------------------------------------
+/*
+SQL Sub queries/inner query/nested query : query within another sql query - return only one row
+IT involves 2 select statments
+
+Sub query can be written inside
+1.select
+2.where
+3.from
+
+Syntax:
+where:
+select col(s) from table_name where col_name operator(subquery);
+*/
+-- get names of all students who scored more than class avg
+-- 1.find avg of class
+-- 2.find names of students with marks>avg
+
+-- static process
+select avg(marks) from student;
+select full_name, marks from student where marks>90.00;
+-- 1. where
+-- dynamic process using sub queries
+select full_name, marks from student where marks>(select avg(marks) from student);
+
+-- find names of all students with even roll numbers
+select full_name,rollno from student where rollno IN (select rollno from student where rollno%2=0);
+
+-- from
+-- find the max marks from the students of delhi
+select max(marks) from student where city="DELHI"; -- normal
+select max(marks) from(select * from student where city="DELHI") as temp; -- when subquery is used in from we need to use alias
+
+-- select
+select (select max(marks) from student),full_name from student;
+-- ------------------------------------------------------------------------------------------------------------------------------
+/*
+MySQL Views
+A view is a virtual table(small part of the table) based on the result-set of an sql statement.we can run query on view table same as main table.
+view do not affect main table it only affects view table.
+eg studet table have all details like place,parents name etc but teacher is concerned only on rollno name and marks of the student.so we can create
+view table that can be used by teacher.
+syntax:
+create view view1 as
+select rollno,name from student
+select * from view1;
+*/
+create view std as 
+select full_name,rollno,marks from student;
+select * from std;
+select * from std where marks>80;
+-- *********************************************************************************************************************************
