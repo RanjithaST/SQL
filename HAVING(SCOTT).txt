@@ -1,0 +1,371 @@
+scott user
+
+ASSIGNMENT QUESTIONS ON HAVING CLAUSE
+
+SQL> DESC EMP;
+ Name                                                  Null?    Type
+ ----------------------------------------------------- -------- ------------------------------------
+ EMPNO                                                 NOT NULL NUMBER(4)
+ ENAME                                                          VARCHAR2(10)
+ JOB                                                            VARCHAR2(9)
+ MGR                                                            NUMBER(4)
+ HIREDATE                                                       DATE
+ SAL                                                            NUMBER(7,2)
+ COMM                                                           NUMBER(7,2)
+ DEPTNO                                                         NUMBER(2)
+
+
+1.WAQTD DNO OF THE EMP'S IF THERE ARE ATLEAST 2 CLERKS WORKING IN EACH DEPT 
+SQL> select deptno from emp
+  2  where job='CLERK'
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(*)>=2;
+
+    DEPTNO
+----------
+        20
+
+
+2.WAQTD DNO AND TOTAL SAALARY NEEDED TO PAY ALL EMP IN EACH DEPT IF THERE ARE ATLEAST 4 EMP IN EACH DEPT 
+SQL> select DEPTNO,SUM(SAL)
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(*)>=4;
+
+    DEPTNO   SUM(SAL)
+---------- ----------
+        30       9400
+        20      10875
+
+
+3.WAQTD NUMBER OF EMP EARNING SAL MORE THAN 1200 IN EACH JOB AND THE TOTAL SAL NEEDED TO PAY EMP OF EACH JOB MUST EXCEES 3800
+SQL> SELECT COUNT(*),JOB
+  2  FROM EMP
+  3  WHERE SAL>1200
+  4  GROUP BY JOB
+  5  HAVING SUM(SAL)>3800;
+
+  COUNT(*) JOB
+---------- ---------
+         4 SALESMAN
+         1 PRESIDENT
+         3 MANAGER
+         2 ANALYST
+
+
+4.WAQTD DEPTNO OF THE EMP'S IF THERE ARE EXACTLY 2 EMP WORKING IN EACH DEPT AS MANAGER .
+SQL> SELECT DEPTNO
+  2  FROM EMP WHERE JOB='MANAGER'
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(*)=2;
+
+no rows selected
+
+
+5.WAQTD JOB AND MAX SAL OF EMP IN EACH JOB IF THE MAX SAL EXCEEDS 2600
+SQL> SELECT JOB,MAX(SAL)
+  2  FROM EMP
+  3  GROUP BY JOB
+  4  HAVING MAX(SAL)>2600;
+
+JOB         MAX(SAL)
+--------- ----------
+PRESIDENT       5000
+MANAGER         2975
+ANALYST         3000
+
+6.WAQTD THE SALARIES WHICH ARE REPEATED IN EMP TABLE
+SQL> SELECT SAL
+  2  FROM EMP
+  3  GROUP BY SAL
+  4  HAVING COUNT(*)>1;
+
+       SAL
+----------
+      1250
+      3000
+
+
+6.WAQTD THE HIREDATE WHICH ARE DUPLICATED IN EMP TABLE
+SQL> SELECT HIREDATE FROM EMP
+  2  GROUP BY HIREDATE
+  3  HAVING COUNT(*)>1;
+
+HIREDATE
+---------
+03-DEC-81
+
+
+
+8.WAQTD AVG SALARY OF EACH DEPT IF AVG SAL IS LESS THAN 3000
+SQL> SELECT AVG(SAL),DEPTNO
+  2  FROM EMP
+  3  GROUP BY DEPTNO
+  4  HAVING COUNT(*)>1;
+
+  AVG(SAL)     DEPTNO
+---------- ----------
+1566.66667         30
+      2175         20
+2916.66667         10
+
+
+
+
+9.WAQTD DEPTNO IF THERE ARE ATLEAST 3 EMP IN EACH DEPT WHOS NAME HAS CHAR 'A' OR 'S' .
+SQL> SELECT DEPTNO
+  2  FROM EMP
+  3  WHERE ENAME LIKE '%A%' OR ENAME LIKE '%S%'
+  4  GROUP BY DEPTNO
+  5  HAVING COUNT(*)>=3;
+
+    DEPTNO
+----------
+        30
+        20
+
+
+10.WAQTD MIN AND MAX SALARIES OF EACH JOB IF MIN SAL IS MORE THAN 1000 AND MAX SAL IS LESS THAN 5000 .
+SQL> SELECT MIN(SAL),MAX(SAL),JOB
+  2  FROM EMP
+  3  GROUP BY JOB
+  4  HAVING MIN(SAL)>1000 AND MAX(SAL)<5000;
+
+  MIN(SAL)   MAX(SAL) JOB
+---------- ---------- ---------
+      1250       1600 SALESMAN
+      2450       2975 MANAGER
+      3000       3000 ANALYST
+
+*****************************************************************************************************************************************************
+Having Clause (HR schema)
+SQL> select * from tab;
+
+TNAME                          TABTYPE  CLUSTERID
+------------------------------ ------- ----------
+COUNTRIES                      TABLE
+DEPARTMENTS                    TABLE
+EMPLOYEES                      TABLE
+EMP_DETAILS_VIEW               VIEW
+JOBS                           TABLE
+JOB_HISTORY                    TABLE
+LOCATIONS                      TABLE
+REGIONS                        TABLE
+
+8 rows selected.
+
+SQL> desc employees;
+ Name                                                                                                              Null?    Type
+ ----------------------------------------------------------------------------------------------------------------- -------- ----------------------------------------------------------------------------
+ EMPLOYEE_ID                                                                                                       NOT NULL NUMBER(6)
+ FIRST_NAME                                                                                                                VARCHAR2(20)
+ LAST_NAME                                                                                                         NOT NULL VARCHAR2(25)
+ EMAIL                                                                                                             NOT NULL VARCHAR2(25)
+ PHONE_NUMBER                                                                                                              VARCHAR2(20)
+ HIRE_DATE                                                                                                         NOT NULL DATE
+ JOB_ID                                                                                                            NOT NULL VARCHAR2(10)
+ SALARY                                                                                                                    NUMBER(8,2)
+ COMMISSION_PCT                                                                                                            NUMBER(2,2)
+ MANAGER_ID                                                                                                                NUMBER(6)
+ DEPARTMENT_ID                                                                                                             NUMBER(4)
+
+
+36.Find department ID, employee count, and average salary for employees whose salary 
+is between 5000 and 10000. Show only departments having more than 2 employees.
+SQL> SELECT DEPARTMENT_ID,COUNT(*),AVG(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE SALARY BETWEEN 5000 AND 10000
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING COUNT(*)>2;
+
+DEPARTMENT_ID   COUNT(*) AVG(SALARY)
+------------- ---------- -----------
+          100          5        7920
+           50          5        7280
+           80         26  8096.15385
+
+37.Show department ID, number of employees, and total salary for employees 
+in departments 10, 20, or 30. Display only departments with total salary above 20000.
+
+SQL> SELECT DEPARTMENT_ID,COUNT(*),SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID IN (10,20,30)
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING SUM(SALARY)>20000;
+
+DEPARTMENT_ID   COUNT(*) SUM(SALARY)
+------------- ---------- -----------
+           30          6       24900
+
+38.Find job ID and number of employees whose first name starts with 'S'. Show only jobs having more than 1 employee.
+SQL> SELECT JOB_ID,COUNT(*)
+  2  FROM EMPLOYEES
+  3  WHERE FIRST_NAME LIKE 'S%'
+  4  GROUP BY JOB_ID
+  5  HAVING COUNT(*)>1;
+
+JOB_ID       COUNT(*)
+---------- ----------
+SH_CLERK            2
+PU_CLERK            2
+SA_REP              3
+ST_CLERK            2
+
+
+39.Show department ID and maximum salary for employees whose commission percentage is NULL. Display only departments where max salary is above 8000.
+SQL> SELECT DEPARTMENT_ID,MAX(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE COMMISSION_PCT IS NULL
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING MAX(SALARY)>8000;
+
+DEPARTMENT_ID MAX(SALARY)
+------------- -----------
+          100       12000
+           30       11000
+           20       13000
+           70       10000
+           90       24000
+          110       12000
+           50        8200
+           60        9000
+
+8 rows selected.
+
+
+40.List job ID and average salary for employees whose salary is between 6000
+and 12000 and job ID ends with '_MAN'. Show only jobs with average salary greater than 8000.
+
+SQL> SELECT JOB_ID,AVG(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE SALARY BETWEEN 6000 AND 12000 AND JOB_ID LIKE '%_MAN'
+  4  GROUP BY JOB_ID
+  5  HAVING AVG(SALARY)>8000;
+
+JOB_ID     AVG(SALARY)
+---------- -----------
+PU_MAN           11000
+SA_MAN      11166.6667
+
+
+41.Display department ID, employee count, and minimum salary for 
+employees hired in 2005 or 2006. Show only departments with minimum salary above 4000.
+
+SQL> SELECT DEPARTMENT_ID,COUNT(*),MIN(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE LIKE '%05' OR HIRE_DATE LIKE '%06'
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING MIN(SALARY)>4000;
+
+42.Show job ID and total salary for employees whose last name contains 'an'. Display only jobs where total salary is greater than 25000.
+SQL> SELECT JOB_ID,SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE LAST_NAME LIKE '%an%'
+  4  GROUP BY JOB_ID
+  5  HAVING SUM(SALARY)>25000;
+
+no rows selected
+
+43.Find department ID and average salary for employees whose department ID
+ is not NULL and salary is above 5000. Show only departments with average salary over 9000.
+SQL> SELECT DEPARTMENT_ID,AVG(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE DEPARTMENT_ID IS NOT NULL AND SALARY>5000
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING AVG(SALARY)>9000;
+
+DEPARTMENT_ID AVG(SALARY)
+------------- -----------
+           30       11000
+           20        9500
+           70       10000
+           90  19333.3333
+          110       10150
+
+44.Display job ID and employee count for employees whose job ID starts with
+ 'SA' and salary between 6000 and 12000. Show only jobs having at least 3 employees.
+SQL> SELECT JOB_ID,COUNT(*)
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID LIKE 'SA%' AND SALARY BETWEEN 6000 AND 12000
+  4  GROUP BY JOB_ID
+  5  HAVING COUNT(*)>=3;
+
+JOB_ID       COUNT(*)
+---------- ----------
+SA_MAN              3
+SA_REP             30
+
+45.Show department ID and total salary for employees in departments
+ 40, 50, or 60 whose commission percentage is NOT NULL. Display only departments with total salary above 30000.
+SQL> SELECT DEPARTMENT_ID,SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE  DEPARTMENT_ID IN (40,50,60) AND COMMISSION_PCT IS NOT NULL
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING SUM(SALARY)>30000;
+
+no rows selected
+
+46.Find job ID and maximum salary for employees whose job ID ends with '_CLERK' 
+and hire date after 2007-01-01. Show only jobs where max salary exceeds 3500.
+SQL> SELECT JOB_ID,MAX(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID LIKE '%_CLERK' AND HIRE_DATE>'01-JAN-2007'
+  4  GROUP BY JOB_ID
+  5  HAVING MAX(SALARY)>3500;
+
+no rows selected
+
+47.Display department ID and number of employees whose salary 
+is not between 4000 and 8000. Show only departments having more than 4 employees.
+SQL> SELECT DEPARTMENT_ID,COUNT(*)
+  2  FROM EMPLOYEES
+  3  WHERE SALARY NOT BETWEEN 4000 AND 8000
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING COUNT(*)>4;
+
+DEPARTMENT_ID   COUNT(*)
+------------- ----------
+           30          6
+           50         38
+           80         20
+
+48.Show job ID and total salary for employees in job IDs 'IT_PROG' or 'SA_MAN' 
+and salary above 6000. Display only jobs with total salary above 20000.
+SQL> SELECT JOB_ID,SUM(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE JOB_ID IN ('IT_PROG','SA_MAN') AND SALARY>6000
+  4  GROUP BY JOB_ID
+  5  HAVING SUM(SALARY)>20000;
+
+JOB_ID     SUM(SALARY)
+---------- -----------
+SA_MAN           61000
+
+49.Find department ID and minimum salary for employees whose first name 
+contains 'ar' and department ID is not NULL. Show only departments with min salary over 3000.
+SQL> SELECT DEPARTMENT_ID,MIN(SALARY)
+  2  FROM EMPLOYEES
+  3  WHERE FIRST_NAME LIKE '%ar%' AND DEPARTMENT_ID IS NOT NULL
+  4  GROUP BY DEPARTMENT_ID
+  5  HAVING MIN(SALARY)>3000;
+
+DEPARTMENT_ID MIN(SALARY)
+------------- -----------
+           80        6200
+
+50.Display job ID, average salary, and employee count for employees 
+hired between 2002 and 2005. Show only jobs with average salary greater than 7000 and at least 2 employees.
+SQL> SELECT JOB_ID,AVG(SALARY),COUNT(*)
+  2  FROM EMPLOYEES
+  3  WHERE HIRE_DATE BETWEEN '01-JAN-2022' AND '31-DEC-2005'
+  4  GROUP BY JOB_ID
+  5  HAVING AVG(SALARY)>7000 AND COUNT(*)>=2;
+
+no rows selected
+
+SQL> SELECT HIRE_DATE FROM EMPLOYEES WHERE HIRE_DATE BETWEEN '01-JAN-2007' AND '01-JAN-2009';
+
+no rows selected
+
+
+
