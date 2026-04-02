@@ -1,0 +1,202 @@
+1.WAQTD NAME OF THE EMPLOYEE AND HIS MANAGER'S NAME IF EMPLOYEE IS WORKING AS CLERK
+SQL> select e1.ename,e2.ename as Manager_name
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.job='CLERK';
+
+ENAME      MANAGER_NA
+---------- ----------
+JAMES      BLAKE
+MILLER     CLARK
+ADAMS      SCOTT
+SMITH      FORD
+
+**************************************************************************************************************************************
+2.WAQTD NAME OF THE EMPLOYEE AND MANAGER'S DESIGNATION IF MANAGER WORKS IN DEPT 10 OR 20 
+SQL> select e1.ename,e2.job as Manager_job
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e2.deptno in (10,20);
+
+ENAME      MANAGER_J
+---------- ---------
+FORD       MANAGER
+SCOTT      MANAGER
+MILLER     MANAGER
+ADAMS      ANALYST
+BLAKE      PRESIDENT
+JONES      PRESIDENT
+CLARK      PRESIDENT
+SMITH      ANALYST
+
+8 rows selected.
+
+**************************************************************************************************************************************
+3.WAQTD NAME OF THE EMP AND MANAGERS SALARY IF EMPLOYEE AND MANAGER BOTH EARN MORE THAN 2300
+SQL> select e1.ename,e2.sal as Manager_sal
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.sal>2300 and e2.sal>2300;
+
+ENAME      MANAGER_SAL
+---------- -----------
+SCOTT             2975
+FORD              2975
+BLAKE             5000
+JONES             5000
+CLARK             5000
+
+**************************************************************************************************************************************
+4.WAQTD EMP NAME AND MANAGER'S HIREDATE IF EMPLOYEE WAS HIRED BEFORE1982
+SQL> select e1.ename,e2.hiredate as MGR_Hiredate
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.hiredate<'01-jan-1982';
+
+ENAME      MGR_HIRED
+---------- ---------
+SMITH      03-DEC-81
+ALLEN      01-MAY-81
+WARD       01-MAY-81
+JONES      17-NOV-81
+MARTIN     01-MAY-81
+BLAKE      17-NOV-81
+CLARK      17-NOV-81
+TURNER     01-MAY-81
+JAMES      01-MAY-81
+FORD       02-APR-81
+
+10 rows selected.
+
+**************************************************************************************************************************************
+5.WAQTD EMP NAME AND MANAGER'S COMM IF EMPLOYEE WORKS AS SALESMAN AND MANAGER WORKS IN DEPT 30
+SQL> select e1.ename,e2.comm as MGR_COMM
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.job='SALESMAN' AND e2.deptno=30;
+
+ENAME        MGR_COMM
+---------- ----------
+ALLEN
+TURNER
+MARTIN
+WARD
+
+**************************************************************************************************************************************
+
+ 6.WAQTD EMP NAME AND MANAGER NAME AND THEIR SALARIES IF EMPLOYEE EARNS MORE THAN MANAGER
+SQL> select e1.ename,e2.ename as MGR_Name,e1.sal,e2.sal
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.sal>e2.sal;
+
+ENAME      MGR_NAME          SAL        SAL
+---------- ---------- ---------- ----------
+FORD       JONES            3000       2975
+SCOTT      JONES            3000       2975
+
+**************************************************************************************************************************************
+7.WAQTD EMP NAME AND HIREDATE , MANAGER NAME AND HIREDATE IF MANAGER WAS HIRED BEFORE EMPLOYEE
+SQL> select e1.ename,e2.hiredate as MGR_Hiredate
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.hiredate<e2.hiredate;
+
+ENAME      MGR_HIRED
+---------- ---------
+ALLEN      01-MAY-81
+WARD       01-MAY-81
+BLAKE      17-NOV-81
+JONES      17-NOV-81
+CLARK      17-NOV-81
+SMITH      03-DEC-81
+
+6 rows selected.
+
+**************************************************************************************************************************************
+8..WAQTD EMP NAME AND MANAGER NAME IF BOTH ARE WORKING IN SAME JOB
+SQL> select e1.ename,e2.ename as MGR_name
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e1.job=e2.job;
+
+no rows selected
+
+**************************************************************************************************************************************
+9.WAQTD EMP NAME AND MANAGER NAME IF MANAGER IS WORKING AS ACTUAL MANAGER
+SQL> select e1.ename,e2.ename as MGR_name
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  where e2.job='MANAGER';
+
+ENAME      MGR_NAME
+---------- ----------
+FORD       JONES
+SCOTT      JONES
+TURNER     BLAKE
+ALLEN      BLAKE
+WARD       BLAKE
+JAMES      BLAKE
+MARTIN     BLAKE
+MILLER     CLARK
+
+8 rows selected.
+
+**************************************************************************************************************************************
+10.WAQTD EMP NAME AND MANAGER NAME ALONG WITH THEIR ANNUAL SALARIES IF EMPLOYEE WORKS IN DEPT 10 , 20 AND MANAGER'S SAL IS GREATER THAN EMPLOYEES SALARY . 
+SQL> select e1.ename,e2.ename as MGR_name,E1.SAL*12 AS EMP_ANNUAL_SAL,E2.SAL*12 AS MGR_ANNUAL_SAL
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  WHERE E1.DEPTNO IN (10,20) AND E2.SAL>E1.SAL;
+
+ENAME      MGR_NAME   EMP_ANNUAL_SAL MGR_ANNUAL_SAL
+---------- ---------- -------------- --------------
+MILLER     CLARK               15600          29400
+ADAMS      SCOTT               13200          36000
+CLARK      KING                29400          60000
+JONES      KING                35700          60000
+SMITH      FORD                 9600          36000
+
+**************************************************************************************************************************************
+11.WAQTD EMPLOYEE'S NAME AND MANAGER'S DESIGNATION FOR ALL THE EMPLOYEES
+SQL> select e1.ename,e2.JOB AS MGR_DESIGNATION
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno;
+
+ENAME      MGR_DESIG
+---------- ---------
+FORD       MANAGER
+SCOTT      MANAGER
+TURNER     MANAGER
+ALLEN      MANAGER
+WARD       MANAGER
+JAMES      MANAGER
+MARTIN     MANAGER
+MILLER     MANAGER
+ADAMS      ANALYST
+BLAKE      PRESIDENT
+JONES      PRESIDENT
+CLARK      PRESIDENT
+SMITH      ANALYST
+
+13 rows selected.
+
+**************************************************************************************************************************************
+12.WAQTD EMPLOYEE'S NAME AND MANAGER'S SALARY FOR ALL THE EMPLOYEES IF MANAGER'S SALARY ENDS WITH 50
+SQL> select e1.ename,e2.SAL AS MGR_SAL
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  WHERE E2.SAL LIKE '%50';
+
+ENAME         MGR_SAL
+---------- ----------
+TURNER           2850
+ALLEN            2850
+WARD             2850
+JAMES            2850
+MARTIN           2850
+MILLER           2450
+
+6 rows selected.
+
+**************************************************************************************************************************************

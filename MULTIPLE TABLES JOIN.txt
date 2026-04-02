@@ -1,0 +1,171 @@
+
+1. WAQTD ENAME, MANAGER'S NAME AND EMPLOYEE'S LOCATION for the employees working as 'CLERK'.
+
+SQL> select e1.ename,e2.ename,d1.loc
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d1
+  4  on e1.deptno=d1.deptno
+  5  where e1.job='CLERK';
+
+ENAME      ENAME      LOC
+---------- ---------- -------------
+MILLER     CLARK      NEW YORK
+SMITH      FORD       DALLAS
+ADAMS      SCOTT      DALLAS
+JAMES      BLAKE      CHICAGO
+
+*************************************************************************************************************************************************************
+2.WAQTD ENAME, MANAGER'S SALARY and MANAGER'S LOCATION if manager works as 'PRESIDENT'.
+SQL> select e1.ename,e2.sal as MGR_SAL,d2.loc as MGR_Loc
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d2
+  4  on e2.deptno=d2.deptno
+  5  where e2.job='PRESIDENT';
+
+ENAME         MGR_SAL MGR_LOC
+---------- ---------- -------------
+JONES            5000 NEW YORK
+BLAKE            5000 NEW YORK
+CLARK            5000 NEW YORK
+
+*************************************************************************************************************************************************************
+3.WAQTD ENAME, EMPLOYEE'S SALARY, MANAGER'S NAME, MANAGER'S SALARY along with employee's DNAME if employee earns more than manager.
+SQL> SELECT e1.ename,e1.sal,e2.ename as MGR_Name,e2.sal as MGR_sal,d1.dname as EMP_Dname
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d1 on
+  4  e1.deptno=d1.deptno
+  5  where e1.sal>e2.sal;
+
+ENAME             SAL MGR_NAME      MGR_SAL EMP_DNAME
+---------- ---------- ---------- ---------- --------------
+FORD             3000 JONES            2975 RESEARCH
+SCOTT            3000 JONES            2975 RESEARCH
+
+
+*************************************************************************************************************************************************************
+4.WAQTD ENAME, SAL, MANAGER'S NAME, MANAGER'S DNAME if manager works in New York with salary more than 3000.
+SQL> select e1.ename,e1.hiredate,e2.hiredate
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d1
+  4  on e1.deptno=d1.deptno
+  5  where e2.hiredate<e1.hiredate and d1.dname='ACCOUNTING';
+
+ENAME      HIREDATE  HIREDATE
+---------- --------- ---------
+MILLER     23-JAN-82 09-JUN-81
+
+
+*************************************************************************************************************************************************************
+5.WAQTD ENAME, EMPLOYEE'S DNAME, MANAGER'S NAME, MANAGER'S DNAME if employee and manager work in the same location.
+SQL> select e1.ename,d1.dname,e2.ename,d2.dname
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d1 on
+  4  e1.deptno=d1.deptno
+  5  join dept d2 on
+  6  e2.deptno=d2.deptno
+  7  where d1.loc=d2.loc;
+
+ENAME      DNAME          ENAME      DNAME
+---------- -------------- ---------- --------------
+CLARK      ACCOUNTING     KING       ACCOUNTING
+MILLER     ACCOUNTING     CLARK      ACCOUNTING
+SMITH      RESEARCH       FORD       RESEARCH
+ADAMS      RESEARCH       SCOTT      RESEARCH
+SCOTT      RESEARCH       JONES      RESEARCH
+FORD       RESEARCH       JONES      RESEARCH
+JAMES      SALES          BLAKE      SALES
+ALLEN      SALES          BLAKE      SALES
+MARTIN     SALES          BLAKE      SALES
+TURNER     SALES          BLAKE      SALES
+WARD       SALES          BLAKE      SALES
+
+11 rows selected.
+
+************************************************************************************************************************************************************
+6. WAQTD ENAME, EMPLOYEE'S HIREDATE, MANAGER'S HIREDATE if manager was hired before the employee in the Accounting department.
+SQL> select e1.ename,e1.hiredate,e2.hiredate
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno join dept d1
+  4  on e1.deptno=d1.deptno
+  5  where e2.hiredate<e1.hiredate and d1.dname='ACCOUNTING';
+
+ENAME      HIREDATE  HIREDATE
+---------- --------- ---------
+MILLER     23-JAN-82 09-JUN-81
+
+*************************************************************************************************************************************************************
+7.WAQTD EMPLOYEE'S NAME, MANAGER'S NAME along with manager's manager's name.
+SQL> select e1.ename,e2.ename as MGR,e3.ename as MGR_MGR
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  join emp e3 on e2.mgr=e3.empno;
+
+ENAME      MGR        MGR_MGR
+---------- ---------- ----------
+SMITH      FORD       JONES
+ALLEN      BLAKE      KING
+WARD       BLAKE      KING
+MARTIN     BLAKE      KING
+SCOTT      JONES      KING
+TURNER     BLAKE      KING
+ADAMS      SCOTT      JONES
+JAMES      BLAKE      KING
+FORD       JONES      KING
+MILLER     CLARK      KING
+
+10 rows selected.
+
+*************************************************************************************************************************************************************
+8.WAQTD ENAME, DNAME, MANAGER'S NAME, HIS DEPT NAME if manager is hired before 1982.
+SQL> select e1.ename,d1.dname,e2.ename,d2.dname
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  join dept d1 on e1.deptno=d1.deptno
+  5  join dept d2 on e2.deptno=d2.deptno
+  6  where e2.hiredate<'01-JAN-1982';
+
+ENAME      DNAME          ENAME      DNAME
+---------- -------------- ---------- --------------
+MILLER     ACCOUNTING     CLARK      ACCOUNTING
+CLARK      ACCOUNTING     KING       ACCOUNTING
+FORD       RESEARCH       JONES      RESEARCH
+SCOTT      RESEARCH       JONES      RESEARCH
+JONES      RESEARCH       KING       ACCOUNTING
+SMITH      RESEARCH       FORD       RESEARCH
+JAMES      SALES          BLAKE      SALES
+TURNER     SALES          BLAKE      SALES
+BLAKE      SALES          KING       ACCOUNTING
+MARTIN     SALES          BLAKE      SALES
+WARD       SALES          BLAKE      SALES
+ALLEN      SALES          BLAKE      SALES
+
+12 rows selected.
+
+*************************************************************************************************************************************************************
+9.WAQTD EMPLOYEE'S NAME with DNAME, MANAGER'S NAME with LOC along with manager's manager's name with LOC.
+SQL> select e1.ename,d1.dname,e2.ename,d2.loc,e3.ename,d3.loc
+  2  from emp e1 join emp e2
+  3  on e1.mgr=e2.empno
+  4  join emp e3 on e2.mgr=e3.empno
+  5  join dept d1 on e1.deptno=d1.deptno
+  6  join dept d2 on e2.deptno=d2.deptno
+  7  join dept d3 on e3.deptno=d3.deptno;
+
+ENAME      DNAME          ENAME      LOC           ENAME      LOC
+---------- -------------- ---------- ------------- ---------- -------------
+MILLER     ACCOUNTING     CLARK      NEW YORK      KING       NEW YORK
+SCOTT      RESEARCH       JONES      DALLAS        KING       NEW YORK
+FORD       RESEARCH       JONES      DALLAS        KING       NEW YORK
+JAMES      SALES          BLAKE      CHICAGO       KING       NEW YORK
+ALLEN      SALES          BLAKE      CHICAGO       KING       NEW YORK
+MARTIN     SALES          BLAKE      CHICAGO       KING       NEW YORK
+TURNER     SALES          BLAKE      CHICAGO       KING       NEW YORK
+WARD       SALES          BLAKE      CHICAGO       KING       NEW YORK
+SMITH      RESEARCH       FORD       DALLAS        JONES      DALLAS
+ADAMS      RESEARCH       SCOTT      DALLAS        JONES      DALLAS
+
+10 rows selected.
+
+*************************************************************************************************************************************************************
+
+
